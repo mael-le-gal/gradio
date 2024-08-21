@@ -33,6 +33,7 @@ import {
 import { check_and_wake_space, check_space_status } from "./helpers/spaces";
 import { open_stream, readable_stream, close_stream } from "./utils/stream";
 import { API_INFO_ERROR_MSG, CONFIG_ERROR_MSG } from "./constants";
+import { v4 as uuidv4 } from "uuid";
 
 export class Client {
 	app_reference: string;
@@ -41,7 +42,7 @@ export class Client {
 	config: Config | undefined;
 	api_info: ApiInfo<JsApiData> | undefined;
 	api_map: Record<string, number> = {};
-	session_hash: string = Math.random().toString(36).substring(2);
+	session_hash: string = uuidv4();
 	jwt: string | false = false;
 	last_status: Record<string, Status["stage"]> = {};
 
