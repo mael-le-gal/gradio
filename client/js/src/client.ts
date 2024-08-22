@@ -41,7 +41,7 @@ export class Client {
 	config: Config | undefined;
 	api_info: ApiInfo<JsApiData> | undefined;
 	api_map: Record<string, number> = {};
-	session_hash: string = Math.random().toString(36).substring(2);
+	session_hash: string = generate_session_hash();
 	jwt: string | false = false;
 	last_status: Record<string, Status["stage"]> = {};
 
@@ -417,6 +417,21 @@ export class Client {
 			view_api: this.view_api,
 			component_server: this.component_server
 		};
+	}
+}
+
+/**
+ * Generate a new session hash
+ * If we are in a secure context (HTTPS or localhost) we generate a UUID otherwise a random string
+ *
+ * @returns {string} The generated session_hash
+ */
+function generate_session_hash(): string {
+	// Function window.crypto.randomUUID() can only by used inside a secured context: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts
+	if (window.isSecureContext) {
+		return window.crypto.randomUUID();
+	} else {
+		return Math.random().toString(36).substring(2);
 	}
 }
 
